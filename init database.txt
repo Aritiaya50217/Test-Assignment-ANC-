@@ -1,0 +1,79 @@
+table status 
+
+INSERT INTO statuses (id,status,created_at,updated_at)
+VALUES (1,"placed_order","2024-10-15","2024-10-15") ,
+(2,"paid","2024-10-15","2024-10-15"),
+(3,"out of shipping","2024-10-15","2024-10-15"),
+(4,"completed","2024-10-15","2024-10-15")
+
+
+table size
+
+INSERT INTO sizes (id,`size` ,created_at,updated_at)
+VALUES (1,"XS","2024-10-15","2024-10-15") ,
+(2,"S","2024-10-15","2024-10-15"),
+(3,"M","2024-10-15","2024-10-15"),
+(4,"L","2024-10-15","2024-10-15"),
+(5,"XL","2024-10-15","2024-10-15") ;
+
+
+table color 
+
+INSERT INTO colors (id,name ,created_at,updated_at)
+VALUES (1,"Red","2024-10-15","2024-10-15") ,
+(2,"Black","2024-10-15","2024-10-15"),
+(3,"Green","2024-10-15","2024-10-15");
+
+
+table patterns 
+
+INSERT INTO patterns (id,name ,created_at,updated_at)
+VALUES (1,"polka dots","2024-10-15","2024-10-15") ,
+(2,"drawing","2024-10-15","2024-10-15") ,
+(3,"calligraphy","2024-10-15","2024-10-15") ;
+
+table figures 
+
+INSERT INTO figures (id,name ,created_at,updated_at)
+VALUES (1,"Batman","2024-10-15","2024-10-15") ,
+(2,"Iron Man","2024-10-15","2024-10-15") ,
+(3,"Spiderman,","2024-10-15","2024-10-15") ;
+
+
+table gender
+
+INSERT INTO genders (id,name ,created_at,updated_at)
+VALUES (1,"Men","2024-10-15","2024-10-15") ,
+(2,"Women","2024-10-15","2024-10-15")  ;
+
+
+
+table products
+
+INSERT INTO products (id,`style` ,gender_id ,size_id,color_id,price)
+VALUES (2,"T-Shirt",1,2,1,400),
+(3,"T-Shirt",1,3,1,420),
+(4,"T-Shirt",1,4,1,430),
+(5,"T-Shirt",1,5,1,450),
+(6,"T-Shirt",2,1,2,290),
+(7,"T-Shirt",2,2,1,290),
+(8,"T-Shirt",2,3,1,290),
+(9,"T-Shirt",2,4,1,320),
+(10,"T-Shirt",2,5,1,320)
+;
+
+
+table users 
+
+INSERT INTO  users (id,username,address,created_at,updated_at)
+VALUES (1,"user one","address ...","2024-10-17","2024-10-17"),
+(2,"user two","address ...","2024-10-17","2024-10-17");
+
+
+table orders 
+
+INSERT INTO orders (id,product_id ,amount ,status_id ,user_id ,created_at,updated_at)
+VALUES 
+(1,1,2,1,1,"2024-10-17","2024-10-17"),
+(2,2,2,1,1,"2024-10-17","2024-10-17") ,
+(3,1,2,1,2,"2024-10-17","2024-10-17");
