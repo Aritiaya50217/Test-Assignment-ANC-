@@ -3,8 +3,8 @@ package models
 import "time"
 
 type Order struct {
-	Id        uint `gorm:"primaryKey;default:auto_random()"`
-	Product   *Products
+	Id uint `gorm:"primaryKey;default:auto_random()"`
+	// Product   *Products
 	ProductId uint `gorm:"product_id"`
 	Amount    uint `gorm:"amount"`
 	Status    *Status

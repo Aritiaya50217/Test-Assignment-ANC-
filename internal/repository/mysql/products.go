@@ -1,41 +1,47 @@
 package models
 
 import (
-	"gorm.io/gorm"
+	"context"
+	"database/sql"
+
+	"github.com/Aritiaya50217/Test-Assignment-ANC/domain"
 )
 
-var db *gorm.DB
-
-type Products struct {
-	Id        uint   `gorm:"primaryKey;default:auto_random()"`
-	Style     string `gorm:"style"`
-	Gender    *Gender
-	GenderId  uint
-	Size      *Size
-	SizeId    uint
-	Color     *Color
-	ColorId   uint
-	Price     float64
-	Pattern   *Patterns
-	PatternId uint
-	Figures   *Figures
-	FigureId  uint
+type ProductRepository struct {
+	DB *sql.DB
 }
 
-func GetAllProducts(genderId int, style string, sizeId, offset, limit, perPage int) (products []Products, total int, err error) {
-	// TODO : query
-
-	// if err := db.Find(&products).Error; err != nil {
-	// 	return nil, err
-	// }
-	return products, total, nil
+// NewProductRepository will create an object that represent the product.Repository inteface
+func NewProductRepository(db *sql.DB) *ProductRepository {
+	return &ProductRepository{
+		DB: db,
+	}
 }
 
-func GetProductById(id int) (product *Products, err error) {
-	// TODO : query
+func (m *ProductRepository) getOne(ctx context.Context, query string, args ...interface{}) (res domain.Product, err error) {
+	smtp, err := m.DB.PrepareContext(ctx, query)
+	if err != nil {
+		return domain.Product{}, err
+	}
+	row := smtp.QueryRowContext(ctx, args...)
+	res = domain.Product{}
 
-	// if err = db.First(product, "id = ? ", id).Error; err != nil {
-	// 	return nil, err
-	// }
-	return product, nil
+	err = row.Scan(
+		&res.Id,
+		&res.Style,
+		&res.GenderId,
+		&res.SizeId,
+		&res.ColorId,
+		&res.PatternId,
+		&res.FigureId,
+		&res.Price,
+		&res.CreatedAt,
+		&res.UpdatedAt,
+	)
+	return
+}
+
+func (m *ProductRepository) GetProductById(ctx context.Context, id int64) (domain.Product, error) {
+	query := "select * from products where id = ? "
+	return m.getOne(ctx, query, id)
 }

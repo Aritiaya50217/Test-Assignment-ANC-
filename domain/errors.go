@@ -1,33 +1,14 @@
 package domain
 
-import "net/http"
+import "errors"
 
-type AppError struct {
-	Code    int
-	Message string
-}
-
-func (e AppError) Error() string {
-	return e.Message
-}
-
-func NewNotFoundError(message string) error {
-	return AppError{
-		Code:    http.StatusNotFound,
-		Message: message,
-	}
-}
-
-func NewUnexpectedError() error {
-	return AppError{
-		Code:    http.StatusInternalServerError,
-		Message: "unexpected error",
-	}
-}
-
-func NewValidationError(message string) error {
-	return AppError{
-		Code:    http.StatusUnprocessableEntity,
-		Message: message,
-	}
-}
+var (
+	// ErrInternalServerError will throw if any the Internal Server Error happen
+	ErrInternalServerError = errors.New("internal Server Error")
+	// ErrNotFound will throw if the requested item is not exists
+	ErrNotFound = errors.New("your requested Item is not found")
+	// ErrConflict will throw if the current action already exists
+	ErrConflict = errors.New("your Item already exist")
+	// ErrBadParamInput will throw if the given request-body or params is not valid
+	ErrBadParamInput = errors.New("given Param is not valid")
+)
