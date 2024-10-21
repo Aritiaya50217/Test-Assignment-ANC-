@@ -3,7 +3,6 @@ package routes
 import (
 	"net/http"
 
-	"github.com/Aritiaya50217/Test-Assignment-ANC/handler"
 	"github.com/gin-gonic/gin"
 )
 
@@ -15,13 +14,13 @@ func SetRouter() *gin.Engine {
 			"message": "pong",
 		})
 	})
-	productGroup := r.Group("/product")
-	productGroup.GET("/list", handler.GetProducts)
-	productGroup.GET("/:id", handler.GetProduct)
+	// productGroup := r.Group("/product")
+	// productGroup.GET("/list", handler.GetProducts)
+	// productGroup.GET("/:id", handler.GetProduct)
 
-	orderGroup := r.Group("/order")
-	orderGroup.POST("/", handler.CreateOrder)
-	orderGroup.GET("/list", handler.GetOrders)
+	// orderGroup := r.Group("/order")
+	// orderGroup.POST("/", handler.CreateOrder)
+	// orderGroup.GET("/list", handler.GetOrders)
 
 	return r
 }
