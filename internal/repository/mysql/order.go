@@ -33,12 +33,13 @@ func (m *OrderRepository) getAll(ctx context.Context, query string, args ...inte
 	// Iterate through the rows
 	for rows.Next() {
 		var item domain.Order
-		if err := rows.Scan(&item.Id,
+		if err := rows.Scan(
+			&item.Id,
 			&item.ProductId,
 			&item.Amount,
-			&item.StatusId,
 			&item.UserId,
 			&item.Address,
+			&item.StatusId,
 			&item.CreatedAt,
 			&item.UpdatedAt,
 		); err != nil {
@@ -56,8 +57,15 @@ func (m *OrderRepository) getAll(ctx context.Context, query string, args ...inte
 }
 
 func (m *OrderRepository) GetAllOrders(ctx context.Context, startDate, endDate, statusId, offset, limit string) ([]domain.Order, int, error) {
-	query := "select * from orders as o " +
-		"where 1=1 "
+	query := "select o.id,o.product_id,o.amount,o.user_id,o.address,h.status_id,o.created_at,o.updated_at from orders as o " +
+		" left join history as h on h.order_id = o.id " +
+		" where 1=1 "
+
+	if statusId != "" {
+		query += " and h.status_id = " + statusId
+	} else {
+		query += " and h.status_id in (1,2,3,4)"
+	}
 
 	if startDate != "" {
 		startDate += " 00:00:00"
@@ -69,22 +77,18 @@ func (m *OrderRepository) GetAllOrders(ctx context.Context, startDate, endDate, 
 		query += " and o.created_at <= " + "'" + endDate + "'"
 	}
 
-	if statusId != "" {
-		query += " and o.status_id = " + statusId
-	}
-
 	query += " limit " + limit
 	query += " offset " + offset
 	return m.getAll(ctx, query)
 }
 
 func (m *OrderRepository) InsertOrder(ctx context.Context, o *domain.Order) (err error) {
-	query := "insert orders set product_id=? ,amount=?,status_id=?,user_id=?,address=?,updated_at=?,created_at=?"
+	query := "insert orders set product_id=? ,amount=?,user_id=?,address=?,updated_at=?,created_at=?"
 	stmt, err := m.DB.PrepareContext(ctx, query)
 	if err != nil {
 		return
 	}
-	res, err := stmt.ExecContext(ctx, o.ProductId, o.Amount, o.StatusId, o.UserId, o.Address, o.UpdatedAt, o.CreatedAt)
+	res, err := stmt.ExecContext(ctx, o.ProductId, o.Amount, o.UserId, o.Address, o.UpdatedAt, o.CreatedAt)
 	if err != nil {
 		return
 	}
