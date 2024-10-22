@@ -85,23 +85,22 @@ func (o *OrderHandler) InsertOrder(c echo.Context) (err error) {
 	now := time.Now().Format("2006-01-02 15:04:05")
 	ctx := c.Request().Context()
 
-	for _, order := range orders.Orders {
-		for _, val := range order.Products {
-			data.ProductId = val.ProductId
-			data.Amount = val.Amount
-			data.UserId = order.UserId
-			data.Address = order.Address
-			data.CreatedAt = now
-			data.UpdatedAt = now
+	for _, val := range orders.Orders.Products {
+		data.ProductId = val.ProductId
+		data.Amount = val.Amount
+		data.UserId = orders.Orders.UserId
+		data.Address = orders.Orders.Address
+		data.CreatedAt = now
+		data.UpdatedAt = now
 
-			// insert to table orders
-			err = o.Service.InsertOrder(ctx, &data)
-			if err != nil {
-				return c.JSON(utils.GetStatusCode(err), utils.ResponseError{
-					Message: err.Error(),
-				})
-			}
+		// insert to table orders
+		err = o.Service.InsertOrder(ctx, &data)
+		if err != nil {
+			return c.JSON(utils.GetStatusCode(err), utils.ResponseError{
+				Message: err.Error(),
+			})
 		}
 	}
+
 	return c.JSON(http.StatusCreated, nil)
 }
