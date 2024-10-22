@@ -12,6 +12,7 @@ import (
 	mysqlRepo "github.com/Aritiaya50217/Test-Assignment-ANC/internal/repository/mysql"
 	"github.com/Aritiaya50217/Test-Assignment-ANC/internal/rest"
 	"github.com/Aritiaya50217/Test-Assignment-ANC/internal/rest/middleware"
+	"github.com/Aritiaya50217/Test-Assignment-ANC/order"
 	product "github.com/Aritiaya50217/Test-Assignment-ANC/product"
 
 	_ "github.com/go-sql-driver/mysql"
@@ -67,13 +68,16 @@ func main() {
 	// Prepare service layer
 	colorRepo := mysqlRepo.NewColorRepository(dbConn)
 	productRepo := mysqlRepo.NewProductRepository(dbConn)
+	orderRepo := mysqlRepo.NewOrderRepository(dbConn)
 
 	// Build service layer
 	colorService := colors.NewService(colorRepo)
 	productService := product.NewService(productRepo)
+	orderService := order.NewService(orderRepo)
 
 	rest.NewColorHandler(e, colorService)
 	rest.NewProductHandler(e, productService)
+	rest.NewOrderHandler(e, orderService)
 
 	// Start Server
 	address := os.Getenv("PORT")

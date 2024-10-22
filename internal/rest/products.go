@@ -13,7 +13,7 @@ import (
 // ProductService represent the product's usecase
 type ProductService interface {
 	GetProductById(ctx context.Context, id int64) (domain.Product, error)
-	GetAllProducts(ctx context.Context, genderId int, style string, sizeId, offset, limit int) ([]domain.Product, int, error)
+	GetAllProducts(ctx context.Context, genderId, style, sizeId, offset, limit string) ([]domain.Product, int, error)
 }
 
 // ProductHandler represent the http handler for product
@@ -48,14 +48,13 @@ func (p *ProductHandler) GetProductById(c echo.Context) error {
 }
 
 func (p *ProductHandler) GetAllProducts(c echo.Context) error {
-	
-	genderId, _ := strconv.Atoi(c.QueryParam("gender_id"))
+	genderId := c.QueryParam("gender_id")
 	style := c.QueryParam("style")
-	sizeId, _ := strconv.Atoi(c.QueryParam("size_id"))
-	offset, _ := strconv.Atoi(c.QueryParam("offset"))
-	limit, _ := strconv.Atoi(c.QueryParam("limit"))
-	if limit == 0 {
-		limit = 10
+	sizeId := c.QueryParam("size_id")
+	offset := c.QueryParam("offset")
+	limit := c.QueryParam("limit")
+	if limit == "" {
+		limit = "10"
 	}
 
 	ctx := c.Request().Context()

@@ -4,7 +4,6 @@ import (
 	"context"
 	"database/sql"
 	"log"
-	"strconv"
 
 	"github.com/Aritiaya50217/Test-Assignment-ANC/domain"
 )
@@ -13,7 +12,7 @@ type ProductRepository struct {
 	DB *sql.DB
 }
 
-// NewProductRepository will create an object that represent the product.Repository inteface
+// NewProductRepository will create an object that represent the product.Repository interface
 func NewProductRepository(db *sql.DB) *ProductRepository {
 	return &ProductRepository{
 		DB: db,
@@ -87,12 +86,12 @@ func (m *ProductRepository) GetProductById(ctx context.Context, id int64) (domai
 	return m.getOne(ctx, query, id)
 }
 
-func (m *ProductRepository) GetAllProducts(ctx context.Context, genderId int, style string, sizeId, offset, limit int) ([]domain.Product, int, error) {
+func (m *ProductRepository) GetAllProducts(ctx context.Context, genderId, style, sizeId, offset, limit string) ([]domain.Product, int, error) {
 	query := "select * from products as p " +
 		"where 1=1 "
 
-	if genderId != 0 {
-		query += "and p.gender_id  =  " + strconv.Itoa(genderId)
+	if genderId != "" {
+		query += "and p.gender_id  =  " + genderId
 	}
 
 	if style != "" {
@@ -100,12 +99,12 @@ func (m *ProductRepository) GetAllProducts(ctx context.Context, genderId int, st
 		query += " and p.`style` like " + word
 	}
 
-	if sizeId != 0 {
-		query += " and p.size_id  = " + strconv.Itoa(sizeId)
+	if sizeId != "" {
+		query += " and p.size_id  = " + sizeId
 	}
 
-	query += " limit " + strconv.Itoa(limit)
-	query += " offset " + strconv.Itoa(offset)
+	query += " limit " + limit
+	query += " offset " + offset
 	return m.getAll(ctx, query)
 
 }

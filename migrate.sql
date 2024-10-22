@@ -71,6 +71,7 @@ CREATE TABLE `orders` (
   `amount` int(11) DEFAULT '0',
   `status_id` int(11) DEFAULT '0',
   `user_id` int(11) DEFAULT '0',
+  `address` varchar(255) DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   `created_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
@@ -79,9 +80,9 @@ CREATE TABLE `orders` (
 LOCK TABLES `orders` WRITE;
 INSERT INTO orders (id,product_id ,amount ,status_id ,user_id ,created_at,updated_at)
 VALUES 
-(1,1,2,1,1,"2024-10-17","2024-10-17"),
-(2,2,2,1,1,"2024-10-17","2024-10-17") ,
-(3,1,2,1,2,"2024-10-17","2024-10-17");
+(1,1,2,1,1,"address ..","2024-10-17","2024-10-17"),
+(2,2,2,1,1,"address ..","2024-10-17","2024-10-17") ,
+(3,1,2,1,2,"address ..","2024-10-17","2024-10-17");
 UNLOCK TABLES;
 
 
