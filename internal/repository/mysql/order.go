@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"log"
+	"time"
 
 	"github.com/Aritiaya50217/Test-Assignment-ANC/domain"
 )
@@ -83,7 +84,7 @@ func (m *OrderRepository) GetAllOrders(ctx context.Context, startDate, endDate, 
 }
 
 func (m *OrderRepository) InsertOrder(ctx context.Context, o *domain.Order) (err error) {
-	query := "insert orders set product_id=? ,amount=?,user_id=?,address=?,updated_at=?,created_at=?"
+	query := "insert orders set product_id=? ,amount=?,user_id=?,address=?,updated_at=?,created_at=? "
 	stmt, err := m.DB.PrepareContext(ctx, query)
 	if err != nil {
 		return
@@ -92,10 +93,23 @@ func (m *OrderRepository) InsertOrder(ctx context.Context, o *domain.Order) (err
 	if err != nil {
 		return
 	}
+
 	lastId, err := res.LastInsertId()
 	if err != nil {
 		return
 	}
 	o.Id = int(lastId)
+
+	// table history
+	query2 := "insert history set order_id=?,status_id=?,created_at=?,updated_at=?"
+	stmt2, err := m.DB.PrepareContext(ctx, query2)
+	if err != nil {
+		return
+	}
+	now := time.Now().Format("2006-01-02 15:04:05")
+	_, err = stmt2.ExecContext(ctx, o.Id, 1, now, now)
+	if err != nil {
+		return
+	}
 	return
 }

@@ -89,7 +89,6 @@ func (o *OrderHandler) InsertOrder(c echo.Context) (err error) {
 		for _, val := range order.Products {
 			data.ProductId = val.ProductId
 			data.Amount = val.Amount
-			// data.StatusId = order.StatusId
 			data.UserId = order.UserId
 			data.Address = order.Address
 			data.CreatedAt = now
