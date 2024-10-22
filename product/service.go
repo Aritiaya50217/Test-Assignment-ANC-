@@ -9,6 +9,7 @@ import (
 // ProductRepository represent the product's repository contract
 type ProductRepository interface {
 	GetProductById(ctx context.Context, id int64) (domain.Product, error)
+	GetAllProducts(ctx context.Context, genderId int, style string, sizeId, offset, limit int) ([]domain.Product, int, error)
 }
 
 type Service struct {
@@ -33,4 +34,16 @@ func (s *Service) GetProductById(ctx context.Context, id int64) (res domain.Prod
 		return domain.Product{}, err
 	}
 	return resProduct, err
+}
+
+func (s *Service) GetAllProducts(ctx context.Context, genderId int, style string, sizeId, offset, limit int) (res []domain.Product, total int, err error) {
+	res, _, err = s.productRepo.GetAllProducts(ctx, genderId, style, sizeId, offset, limit)
+	if err != nil {
+		return
+	}
+	resProducts, total, err := s.productRepo.GetAllProducts(ctx, genderId, style, sizeId, offset, limit)
+	if err != nil {
+		return []domain.Product{}, 0, err
+	}
+	return resProducts, total, err
 }

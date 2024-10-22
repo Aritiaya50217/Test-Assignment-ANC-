@@ -3,6 +3,8 @@ package models
 import (
 	"context"
 	"database/sql"
+	"log"
+	"strconv"
 
 	"github.com/Aritiaya50217/Test-Assignment-ANC/domain"
 )
@@ -41,7 +43,69 @@ func (m *ProductRepository) getOne(ctx context.Context, query string, args ...in
 	return
 }
 
+func (m *ProductRepository) getAll(ctx context.Context, query string, args ...interface{}) ([]domain.Product, int, error) {
+	// Execute the SELECT query
+	rows, err := m.DB.Query(query, args...)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer rows.Close()
+
+	// Prepare a slice to hold the results
+	var results []domain.Product
+	var total int
+
+	// Iterate through the rows
+	for rows.Next() {
+		var item domain.Product
+		if err := rows.Scan(&item.Id,
+			&item.Style,
+			&item.GenderId,
+			&item.SizeId,
+			&item.ColorId,
+			&item.PatternId,
+			&item.FigureId,
+			&item.Price,
+			&item.CreatedAt,
+			&item.UpdatedAt,
+		); err != nil {
+			log.Fatal(err)
+		}
+		results = append(results, item)
+	}
+
+	// Check for errors from iterating over rows
+	if err := rows.Err(); err != nil {
+		log.Fatal(err)
+	}
+	total = len(results)
+	return results, total, nil
+}
+
 func (m *ProductRepository) GetProductById(ctx context.Context, id int64) (domain.Product, error) {
 	query := "select * from products where id = ? "
 	return m.getOne(ctx, query, id)
+}
+
+func (m *ProductRepository) GetAllProducts(ctx context.Context, genderId int, style string, sizeId, offset, limit int) ([]domain.Product, int, error) {
+	query := "select * from products as p " +
+		"where 1=1 "
+
+	if genderId != 0 {
+		query += "and p.gender_id  =  " + strconv.Itoa(genderId)
+	}
+
+	if style != "" {
+		word := "'%" + style + "%'"
+		query += " and p.`style` like " + word
+	}
+
+	if sizeId != 0 {
+		query += " and p.size_id  = " + strconv.Itoa(sizeId)
+	}
+
+	query += " limit " + strconv.Itoa(limit)
+	query += " offset " + strconv.Itoa(offset)
+	return m.getAll(ctx, query)
+
 }
