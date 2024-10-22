@@ -1,11 +1,9 @@
-package models
+package mysql
 
-import "time"
-
-type User struct {
-	Id        uint      `gorm:"primaryKey;default:auto_random()"`
-	Username  string    `gorm:"username"`
-	Address   string    `gorm:"address"`
-	CreatedAt time.Time `gorm:"created_at"`
-	UpdatedAt time.Time `gorm:"updated_at"`
-}
+// type User struct {
+// 	Id        uint
+// 	Username  string
+// 	Address   string
+// 	CreatedAt time.Time
+// 	UpdatedAt time.Time
+// }
