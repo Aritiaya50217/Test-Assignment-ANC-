@@ -69,7 +69,6 @@ CREATE TABLE `orders` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `product_id` int(11) DEFAULT '0',
   `amount` int(11) DEFAULT '0',
-  `status_id` int(11) DEFAULT '0',
   `user_id` int(11) DEFAULT '0',
   `address` varchar(255) DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
@@ -78,11 +77,11 @@ CREATE TABLE `orders` (
 )ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 LOCK TABLES `orders` WRITE;
-INSERT INTO orders (id,product_id ,amount ,status_id ,user_id ,created_at,updated_at)
+INSERT INTO orders (id,product_id ,amount,user_id,address ,created_at,updated_at)
 VALUES 
-(1,1,2,1,1,"address ..","2024-10-17","2024-10-17"),
-(2,2,2,1,1,"address ..","2024-10-17","2024-10-17") ,
-(3,1,2,1,2,"address ..","2024-10-17","2024-10-17");
+(1,1,2,2,"address ..","2024-10-17","2024-10-17"),
+(2,2,2,2,"address ..","2024-10-17","2024-10-17") ,
+(3,1,2,3,"address ..","2024-10-17","2024-10-17");
 UNLOCK TABLES;
 
 
@@ -254,4 +253,25 @@ INSERT INTO  `authentications` (id,user_id,token,created_at,updated_at)
 VALUES (1,1,"","2024-10-17","2024-10-17"),
 (2,2,"","2024-10-17","2024-10-17"),
 (3,2,"","2024-10-17","2024-10-17");
+UNLOCK TABLES;
+
+
+CREATE DATABASE  IF NOT EXISTS `history` ;
+USE `history` ;
+
+DROP TABLE IF EXISTS `history`;
+CREATE TABLE `history` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `order_id` int(11) DEFAULT '0',
+  `status_id` int(11) DEFAULT '0',
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+)ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+LOCK TABLES `history` WRITE;
+INSERT INTO  `history` (id,order_id,status_id,created_at,updated_at)
+VALUES (1,1,1,"2024-10-17","2024-10-17"),
+(2,1,2,"2024-10-17","2024-10-17"),
+(3,1,3,"2024-10-17","2024-10-17");
 UNLOCK TABLES;
