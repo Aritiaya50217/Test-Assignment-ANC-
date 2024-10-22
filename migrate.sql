@@ -199,14 +199,59 @@ DROP TABLE IF EXISTS `users`;
 CREATE TABLE `users` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `username` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
+  `password` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
+  `role_id` int(11) DEFAULT '0',
   `address` varchar(255) COLLATE utf8_unicode_ci NULL,
-  `updated_at` datetime DEFAULT NULL,
   `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
 )ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 LOCK TABLES `users` WRITE;
-INSERT INTO  `users` (id,username,address,created_at,updated_at)
-VALUES (1,"user one","address ...","2024-10-17","2024-10-17"),
-(2,"user two","address ...","2024-10-17","2024-10-17");
+INSERT INTO  `users` (id,username,password,role_id,address,created_at,updated_at)
+VALUES (1,"user one","",1,"address ...","2024-10-17","2024-10-17"),
+(2,"user two","",2,"address ...","2024-10-17","2024-10-17"),
+(3,"user three","",2,"address ...","2024-10-17","2024-10-17");
+UNLOCK TABLES;
+
+
+CREATE DATABASE  IF NOT EXISTS `roles` ;
+USE `roles` ;
+
+DROP TABLE IF EXISTS `roles`;
+
+CREATE TABLE `roles` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(20) DEFAULT '0',
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+)ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+LOCK TABLES `roles` WRITE;
+INSERT INTO  `roles` (id,name,created_at,updated_at)
+VALUES (1,"admin","2024-10-17","2024-10-17"),
+(2,"customer","2024-10-17","2024-10-17");
+UNLOCK TABLES;
+
+
+CREATE DATABASE  IF NOT EXISTS `authentications` ;
+USE `authentications` ;
+
+DROP TABLE IF EXISTS `authentications`;
+
+CREATE TABLE `authentications` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) DEFAULT '0',
+  `token` varchar(255) COLLATE utf8_unicode_ci NULL,
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+)ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+LOCK TABLES `authentications` WRITE;
+INSERT INTO  `authentications` (id,user_id,token,created_at,updated_at)
+VALUES (1,1,"","2024-10-17","2024-10-17"),
+(2,2,"","2024-10-17","2024-10-17"),
+(3,2,"","2024-10-17","2024-10-17");
 UNLOCK TABLES;
