@@ -12,5 +12,7 @@ type Product struct {
 	UpdatedAt string `json:"updated_at"`
 	CreatedAt string `json:"created_at"`
 }
-
-		
+type ProductRequest struct {
+	ProductId int `json:"product_id"`
+	Amount    int `json:"amount"`
+}

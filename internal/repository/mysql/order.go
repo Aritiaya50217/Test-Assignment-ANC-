@@ -77,3 +77,21 @@ func (m *OrderRepository) GetAllOrders(ctx context.Context, startDate, endDate, 
 	query += " offset " + offset
 	return m.getAll(ctx, query)
 }
+
+func (m *OrderRepository) InsertOrder(ctx context.Context, o *domain.Order) (err error) {
+	query := "insert orders set product_id=? ,amount=?,status_id=?,user_id=?,address=?,updated_at=?,created_at=?"
+	stmt, err := m.DB.PrepareContext(ctx, query)
+	if err != nil {
+		return
+	}
+	res, err := stmt.ExecContext(ctx, o.ProductId, o.Amount, o.StatusId, o.UserId, o.Address, o.UpdatedAt, o.CreatedAt)
+	if err != nil {
+		return
+	}
+	lastId, err := res.LastInsertId()
+	if err != nil {
+		return
+	}
+	o.Id = int(lastId)
+	return
+}

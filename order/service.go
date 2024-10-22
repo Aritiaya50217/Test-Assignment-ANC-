@@ -9,6 +9,7 @@ import (
 // orderRepository represent the order's repository contract
 type OrderRepository interface {
 	GetAllOrders(ctx context.Context, startDate, endDate, statusId, offset, limit string) ([]domain.Order, int, error)
+	InsertOrder(ctx context.Context, o *domain.Order) error
 }
 
 type Service struct {
@@ -27,9 +28,17 @@ func (s *Service) GetAllOrders(ctx context.Context, startDate, endDate, statusId
 	if err != nil {
 		return
 	}
-	resOrders, total, err := s.orderRepo.GetAllOrders(ctx, startDate, endDate, statusId, offset, limit )
+	resOrders, total, err := s.orderRepo.GetAllOrders(ctx, startDate, endDate, statusId, offset, limit)
 	if err != nil {
 		return []domain.Order{}, 0, err
 	}
 	return resOrders, total, err
+}
+
+func (s *Service) InsertOrder(ctx context.Context, o *domain.Order) (err error) {
+	err = s.orderRepo.InsertOrder(ctx, o)
+	if err != nil {
+		return
+	}
+	return
 }
